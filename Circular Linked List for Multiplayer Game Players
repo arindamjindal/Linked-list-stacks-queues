@@ -1,0 +1,126 @@
+#include <iostream>
+using namespace std;
+class Node
+{
+public:
+    int player_id;
+    Node *next;
+    Node *prev;
+    Node(int pid)
+    {
+        player_id = pid;
+        next = NULL;
+        prev = NULL;
+    }
+};
+void show(Node *tail)
+{
+    Node *ptr = tail;
+    if (ptr == NULL)
+    {
+        cout << "No list";
+        return;
+    }
+    ptr = ptr->next;
+    while (ptr != tail)
+    {
+        cout << "player_id=  " << ptr->player_id << endl;
+        ptr = ptr->next;
+    }
+    cout << "player_id=  " << ptr->player_id << endl;
+}
+void CountPlayers(Node *tail)
+{
+    int count = 1;
+    int total = 0;
+    Node *temp = tail;
+    temp = temp->next;
+    while (temp != tail)
+    {
+        count++;
+        temp = temp->next;
+    }
+    cout << "Total Players= " << count << endl;
+}
+bool Search(Node *tail, int pid)
+{
+    int count = 0;
+    Node *temp = tail;
+    if (temp->player_id == pid)
+    {
+        return true;
+    }
+    temp = temp->next;
+    while (temp != tail)
+    {
+        if (temp->player_id == pid)
+        {
+            return true;
+        }
+        temp = temp->next;
+    }
+    return false;
+}
+void RemovePlayer(Node *&tail, int pid)
+{
+    Node *temp = tail;
+    int count = 0;
+    if (tail == NULL)
+    {
+        cout << "List is empty";
+        return;
+    }
+    if (tail == tail->next)
+    {
+        tail = NULL;
+        return;
+    }
+    Node *prev = temp;
+    if (Search(tail, pid))
+    {
+        temp = temp->next;
+        while (temp->player_id != pid)
+        {
+            prev = temp;
+            temp = temp->next;
+        }
+        prev->next = temp->next;
+        if (temp == tail)
+        {
+            tail = prev;
+        }
+        temp->next = NULL;
+        cout << "Player removed Successfully\n ";
+    }
+    else
+        cout << "No Player with this player_id exists\n";
+}
+int main()
+{
+    Node n1(101);
+    Node n2(102);
+    Node n3(103);
+    n1.next = &n2;
+    n2.next = &n3;
+    n3.next = &n1;
+    Node *tail = &n3;
+    cout << "Displaying player: " << endl;
+    show(tail);
+    cout << endl;
+    cout << "Counting players: " << endl;
+    CountPlayers(tail);
+    cout << endl;
+    cout << "Searching Player: " << endl;
+    int exists = Search(tail, 103);
+    if (exists)
+    {
+        cout << "Player Found" << endl;
+    }
+    else
+        cout << "Player not Found" << endl;
+    cout << "\nRemoving Player  " << endl;
+    RemovePlayer(tail, 101);
+    cout << endl;
+    cout << "Displaying players after Removing: " << endl;
+    show(tail);
+}
