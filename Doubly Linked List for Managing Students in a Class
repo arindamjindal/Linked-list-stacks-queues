@@ -1,0 +1,226 @@
+#include <iostream>
+using namespace std;
+class Node
+{
+public:
+    int student_id;
+    int value;
+    Node *next;
+    Node *prev;
+    Node(int sid, int val)
+    {
+        student_id = sid;
+        value = val;
+        next = NULL;
+        prev = NULL;
+    }
+};
+
+void showWithHead(Node *head)
+{
+    cout << "Show with head:" << endl;
+    Node *ptr = head;
+    while (ptr != NULL)
+    {
+        cout << "student_id=  " << ptr->student_id << endl;
+        ptr = ptr->next;
+    }
+}
+
+void showWithTail(Node *tail)
+{
+    cout << "Show with tail:" << endl;
+    Node *ptr = tail;
+    while (ptr != NULL)
+    {
+        cout << "student_id=  " << ptr->student_id << endl;
+        ptr = ptr->prev;
+    }
+}
+
+void CountstudentsWithHead(Node *head)
+{
+    int count = 0;
+    int total = 0;
+    Node *temp = head;
+    while (temp != NULL)
+    {
+        count++;
+        temp = temp->next;
+    }
+    cout << "Total Students= " << count << endl;
+}
+
+void CountstudentsWithTail(Node *tail)
+{
+    int count = 0;
+    int total = 0;
+    Node *temp = tail;
+    while (temp != NULL)
+    {
+        count++;
+        temp = temp->prev;
+    }
+    cout << "Total Students= " << count << endl;
+}
+
+void searchWithHead(Node *head, int id)
+{
+    Node *temp = head;
+    while (temp != NULL)
+    {
+        if (temp->student_id == id)
+        {
+            break;
+        }
+        temp = temp->next;
+    }
+    if (temp == NULL)
+    {
+        cout << "No current Student exist with this student_id= " << id << endl;
+    }
+    else
+        cout << "Student Found with student_id = " << id << endl;
+}
+
+void searchWithTail(Node *tail, int id)
+{
+    Node *temp = tail;
+    while (temp != NULL)
+    {
+        if (temp->student_id == id)
+        {
+            break;
+        }
+        temp = temp->prev;
+    }
+    if (temp == NULL)
+    {
+        cout << "No current Student exist with this student_id= " << id << endl;
+    }
+    else
+        cout << "student Found with student_id = " << id << endl;
+}
+
+void deleteStudentWithHead(Node *&head, Node *&tail, int sid)
+{
+    Node *temp = head;
+    Node *ptr = NULL;
+    while (temp != NULL)
+    {
+        if (temp->student_id == sid)
+        {
+            break;
+        }
+        ptr = temp;
+        temp = temp->next;
+    }
+    if (temp == NULL)
+    {
+        cout << "No current Student exist with this student_id" << endl;
+        return;
+    }
+    if (temp == head)
+    {
+        head = temp->next;
+        if (head != NULL)
+        {
+            head->prev = NULL;
+        }
+    }
+    else
+    {
+        ptr->next = temp->next;
+        if (temp->next != NULL)
+        {
+            temp->next->prev = ptr;
+        }
+    }
+
+    if (temp == tail)
+    {
+        tail = ptr;
+    }
+    cout << "Student deleted with this student_id =" << temp->student_id << endl;
+    return;
+}
+
+void deleteStudentWithTail(Node *&head, Node *&tail, int sid)
+{
+    Node *temp = tail;
+    Node *ptr = NULL;
+    while (temp != NULL)
+    {
+        if (temp->student_id == sid)
+        {
+            break;
+        }
+        ptr = temp;
+        temp = temp->prev;
+    }
+    if (temp == NULL)
+    {
+        cout << "No current Student exist with this student_id" << endl;
+        return;
+    }
+    if (temp == head)
+    {
+        head = ptr;
+        if (head != NULL)
+        {
+            head->prev = NULL;
+        }
+    }
+    else
+    {
+        ptr->prev = temp->prev;
+
+        if (temp->prev != NULL)
+        {
+            temp->prev->next = ptr;
+        }
+    }
+
+    if (temp == tail)
+    {
+        tail = tail->prev;
+    }
+    cout << "Student deleted with this student_id =" << temp->student_id << endl;
+    return;
+}
+int main()
+{
+    Node n1(101, 20);
+    Node n2(102, 30);
+    Node n3(103, 40);
+    n1.next = &n2;
+    n2.prev = &n1;
+    n2.next = &n3;
+    n3.prev = &n2;
+    Node *head = &n1;
+    Node *tail = &n3;
+    cout << "Counting students With Head:" << endl;
+    CountstudentsWithHead(head);
+    cout << endl;
+    cout << "Counting students With tail:" << endl;
+    CountstudentsWithTail(tail);
+    cout << endl;
+    cout << "Searching students With Head:" << endl;
+    searchWithHead(head, 101);
+    cout << endl;
+    cout << "Searching students With tail:" << endl;
+    searchWithTail(tail, 101);
+    cout << endl;
+    cout << "Deleating students With Head:" << endl;
+    deleteStudentWithHead(head, tail, 101);
+    cout << endl;
+    cout << "Deleating students With Tail:" << endl;
+    deleteStudentWithTail(head, tail, 101);
+    cout << endl;
+    showWithHead(head);
+    cout << endl;
+    showWithTail(tail);
+    cout << endl;
+    cout << "Head_at= " << head->student_id << endl;
+    cout << "Tail_at= " << tail->student_id;
+}
